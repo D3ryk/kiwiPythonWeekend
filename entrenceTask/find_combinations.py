@@ -5,5 +5,5 @@ flights = sys.stdin.read().split()
 
 flightsSearcherService = FlightsSearcherService(flights[1::])
 flightsSearcherService.printFlightCombination(
-	flightsSearcherService.findCombination()
+    flightsSearcherService.findCombination()
 )
