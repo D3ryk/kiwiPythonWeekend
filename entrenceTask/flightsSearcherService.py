@@ -4,11 +4,10 @@ from itinerary import Itinerary
 
 class FlightsSearcherService:
     def __init__(self, flightsData):
-        self.flightsData = flightsData
+        self._flightsData = flightsData
 
     def findCombination(self):
         flightCombinations = []
-        itineraryQueue = []
 
         for baggageCount in [0, 1, 2]:
             itineraryQueue = self.getInitializedItineraryQueue(baggageCount)
@@ -16,7 +15,7 @@ class FlightsSearcherService:
             while len(itineraryQueue) > 0:
                 itinerary = itineraryQueue.pop()
 
-                for flightLine in self.flightsData:
+                for flightLine in self._flightsData:
                     flight = Flight(self.getFlightData(flightLine))
                     if baggageCount > 0 and baggageCount != flight.getAllowedBaggage():
                         continue
@@ -36,9 +35,9 @@ class FlightsSearcherService:
     def getInitializedItineraryQueue(self, baggageCount):
         itineraryQueue = []
 
-        for flightLine in self.flightsData:
+        for flightLine in self._flightsData:
             flight = Flight(self.getFlightData(flightLine))
-            if baggageCount == 0 or flight.getAllowedBaggage() >= baggageCount:
+            if flight.getAllowedBaggage() >= baggageCount:
                 itineraryQueue.append(
                     Itinerary(
                         baggageCount,
