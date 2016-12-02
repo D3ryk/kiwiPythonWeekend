@@ -2,17 +2,17 @@ class Itinerary:
     TRANSFER_LOWER_TIME_BOUNDARY = 60 * 60  # 1 hour
     TRANSFER_UPPER_TIME_BOUNDARY = 60 * 60 * 4  # 4 hours
 
-    def __init__(self, baggage, way, flightsNumbers, price, arrivalTime):
+    def __init__(self, baggage, way, flights_numbers, price, arrival_time):
         self.baggage = int(baggage)
         self.way = str(way)
-        self.flightsNumbers = flightsNumbers
+        self.flightsNumbers = flights_numbers
         self.price = int(price)
-        self.arrivalTime = arrivalTime
+        self.arrivalTime = arrival_time
 
     def toString(self):
         return str(self.baggage) + ',' + self.way + ',[' + ','.join(self.flightsNumbers) + '],' + str(self.price)
 
-    def addNextStopToWay(self, flight, baggage):
+    def add_next_stop_to_way(self, flight, baggage):
         return Itinerary(
             self.baggage,
             self.way + '->' + flight.destination,
@@ -21,9 +21,9 @@ class Itinerary:
             flight.arrival
         )
 
-    def isFollowedUp(self, flight):
-        transferTimeDelta = flight.departure - self.arrivalTime
-        return self.TRANSFER_LOWER_TIME_BOUNDARY <= transferTimeDelta.seconds <= self.TRANSFER_UPPER_TIME_BOUNDARY
+    def is_followed_up(self, flight):
+        transfer_time_delta = flight.departure - self.arrivalTime
+        return self.TRANSFER_LOWER_TIME_BOUNDARY <= transfer_time_delta.seconds <= self.TRANSFER_UPPER_TIME_BOUNDARY
 
-    def isCreateValidPath(self, flight):
+    def is_create_valid_path(self, flight):
         return (self.way[-3::] + '->' + flight.destination not in self.way) and self.way[-3::] == flight.source and self.way[-3::] != flight.destination
