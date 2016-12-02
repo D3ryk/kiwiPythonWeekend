@@ -53,4 +53,4 @@ class FlightsSearcherService:
     def print_flight_combination(self, combinations):
         print('numberOfBaggage,itinerary,listOfFlights,wholePriceIncludingBaggage')
         for itinerary in combinations:
-            print(itinerary.toString())
+            print(itinerary)
