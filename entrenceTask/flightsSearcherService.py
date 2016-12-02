@@ -17,7 +17,7 @@ class FlightsSearcherService:
 
                 for flightLine in self._flightsData:
                     flight = Flight(self.getFlightData(flightLine))
-                    if baggageCount > 0 and baggageCount != flight.getAllowedBaggage():
+                    if baggageCount > 0 and baggageCount != flight.bags_allowed:
                         continue
                     else:
                         if itinerary.isFollowedUp(flight) and itinerary.isCreateValidPath(flight):
@@ -37,14 +37,14 @@ class FlightsSearcherService:
 
         for flightLine in self._flightsData:
             flight = Flight(self.getFlightData(flightLine))
-            if flight.getAllowedBaggage() >= baggageCount:
+            if flight.bags_allowed >= baggageCount:
                 itineraryQueue.append(
                     Itinerary(
                         baggageCount,
-                        flight.getSource() + '->' + flight.getDestination(),
-                        [flight.getFlightNumber()],
-                        flight.getPrice(),
-                        flight.getArrivalTime()
+                        flight.source + '->' + flight.destination,
+                        [flight.flight_number],
+                        flight.price,
+                        flight.arrival
                     )
                 )
 

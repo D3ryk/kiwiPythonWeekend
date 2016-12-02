@@ -15,17 +15,15 @@ class Itinerary:
     def addNextStopToWay(self, flight, baggage):
         return Itinerary(
             self.baggage,
-            self.way + '->' + flight.getDestination(),
-            self.flightsNumbers + [flight.getFlightNumber()],
-            self.price + flight.getPrice() + baggage * flight.getBagPrice(),
-            flight.getArrivalTime()
+            self.way + '->' + flight.destination,
+            self.flightsNumbers + [flight.flight_number],
+            self.price + flight.price + baggage * flight.bag_price,
+            flight.arrival
         )
 
     def isFollowedUp(self, flight):
-        transferTimeDelta = flight.getDepartureTime() - self.arrivalTime
+        transferTimeDelta = flight.departure - self.arrivalTime
         return self.TRANSFER_LOWER_TIME_BOUNDARY <= transferTimeDelta.seconds <= self.TRANSFER_UPPER_TIME_BOUNDARY
 
     def isCreateValidPath(self, flight):
-        return (self.way[-3::] + '->' + flight.getDestination() not in self.way) and self.way[
-                                                                                     -3::] == flight.getSource() and self.way[
-                                                                                                                     -3::] != flight.getDestination()
+        return (self.way[-3::] + '->' + flight.destination not in self.way) and self.way[-3::] == flight.source and self.way[-3::] != flight.destination
