@@ -1,2 +1,5 @@
 #PyCharm project dir
 .idea/
+
+#pycache
+__pycache__
