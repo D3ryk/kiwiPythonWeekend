@@ -10,7 +10,10 @@ class Itinerary:
         self.arrivalTime = arrival_time
 
     def __str__(self):
-        return str(self.baggage) + ',' + self.way + ',[' + ','.join(self.flightsNumbers) + '],' + str(self.price)
+        return '{0},{1},[{2}],{3}'.format(str(self.baggage), self.way, ','.join(self.flightsNumbers), str(self.price))
+
+    def __repr__(self):
+        return '({0},{1},[{2}],{3})'.format(str(self.baggage), self.way, ','.join(self.flightsNumbers), str(self.price))
 
     def add_next_stop_to_way(self, flight, baggage):
         return Itinerary(
