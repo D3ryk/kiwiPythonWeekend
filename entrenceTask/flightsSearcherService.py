@@ -17,13 +17,12 @@ class FlightsSearcherService:
 
                 for flightLine in self._flightsData:
                     flight = Flight(self.get_flight_data(flightLine))
-                    if baggageCount > 0 and baggageCount != flight.bags_allowed:
-                        continue
-                    else:
-                        if itinerary.is_followed_up(flight) and itinerary.is_create_valid_path(flight):
-                            itinerary_queue.append(
-                                itinerary.add_next_stop_to_way(flight, baggageCount)
-                            )
+                    if (itinerary.is_followed_up(flight)
+                        and itinerary.is_create_valid_path(flight)
+                        and (baggageCount == 0 or baggageCount == flight.bags_allowed)):
+                        itinerary_queue.append(
+                            itinerary.add_next_stop_to_way(flight, baggageCount)
+                        )
 
                 flight_combinations.append(itinerary)
 
