@@ -1,5 +1,4 @@
 from grab import Grab
-from datetime import datetime
 
 class DataParser:
     def __init__(self):
