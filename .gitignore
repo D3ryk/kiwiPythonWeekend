@@ -1,5 +1,8 @@
 #PyCharm project dir
 .idea/
 
-#pycache
+#Pycache dir
 __pycache__
+
+#Slides from workshop
+slides/
