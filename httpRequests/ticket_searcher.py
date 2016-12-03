@@ -1,42 +1,25 @@
-from grab import Grab
+from data_parser import DataParser
+from redis import StrictRedis
 
 
 class TicketSearcher:
     def __init__(self):
-        self.g = Grab()
-        self.g.go('https://www.studentagency.cz/data/wc/ybus-form/destinations-cs.json')
-        self.all_destination = self.g.response.json
-
-        for destination in self.all_destination['destinations']:
-            if destination['code'] == 'CZ':
-                self.all_cities = destination['cities']
-                break
-
-    def show_last_response_in_browser(self):
-        self.g.response.browse()
+        self.data_parser = DataParser()
+        self.all_cities = self.data_parser.get_all_destination()
+        self.redis = StrictRedis(**{
+            'host': '146.185.172.28',
+            'password': 'razdvatrictyripet',
+            'port': '6379'
+        })
 
     def get_connections(self, source, destination, when):
-        self.g.go('https://jizdenky.regiojet.cz')
-        self.g.go('https://jizdenky.regiojet.cz/Booking/from/{0}/to/{1}/tarif/REGULAR/departure/{2}/retdep/{2}/return/false'.format(source, destination, when))
-        self.g.go('https://jizdenky.regiojet.cz/Booking/from/{0}/to/{1}/tarif/REGULAR/departure/{2}/retdep/{2}/return/false?1-1.IBehaviorListener.0-mainPanel-routesPanel&_=1480766048364'.format(source, destination, when))
+        key = 'connections_{0}_{1}_{2}'.format(source, destination, when)
 
-        connections = []
-        for elem in self.g.doc.select('//div[contains(@class, "routeSummary")]'):
-            departure = elem.select('//div[contains(@class, "col_depart")]')
-            arrival = elem.select('//div[contains(@class, "col_arival")]')
-            change = elem.select('//div[contains(@class, "col_change")]')
-            space = elem.select('//div[contains(@class, "col_space")]')
-            price = elem.select('//div[contains(@class, "col_price")]')
-            price = price.text().split()
+        connections = self.redis.get(key)
+        if not connections:
+            connections = self.data_parser.get_connections(source, destination, when)
 
-            connections.append({
-                'departure': departure.text(),
-                'arrival': arrival.text(),
-                'transfer': change.text(),
-                'free_spaces': space.text(),
-                'price': price.pop(0),
-                'currency': price.pop(0)
-            })
+        self.redis.set(key, connections)
 
         return connections
 
@@ -47,4 +30,3 @@ class TicketSearcher:
             exit('City ' + name + ' wasn\'t found in city dictionary')
 
         return city_id.pop(0)
-
