@@ -1,5 +1,6 @@
 from grab import Grab
 
+
 class DataParser:
     def __init__(self):
         self.g = Grab()

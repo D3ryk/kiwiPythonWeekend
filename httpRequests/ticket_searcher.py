@@ -36,5 +36,5 @@ class TicketSearcher:
         return city_id.pop(0)
 
     def get_best_connection(self, connections):
-        print(connections)
-        return {}
+        filtered_connections = [connection for connection in connections if int(connection['free_spaces']) > 0]
+        return min(filtered_connections, key=lambda x: x['price'])
