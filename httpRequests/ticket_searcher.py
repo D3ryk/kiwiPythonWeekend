@@ -17,8 +17,8 @@ class TicketSearcher:
 
     def get_connections(self, source, destination, when):
         self.g.go('https://jizdenky.regiojet.cz')
-        self.g.go('https://jizdenky.regiojet.cz/Booking/from/{0}/to/{1}/tarif/REGULAR/departure/20161203/retdep/20161203/return/false'.format(source, destination))
-        self.g.go('https://jizdenky.regiojet.cz/Booking/from/{0}/to/{1}/tarif/REGULAR/departure/20161203/retdep/20161203/return/false?1-1.IBehaviorListener.0-mainPanel-routesPanel&_=1480766048364'.format(source, destination))
+        self.g.go('https://jizdenky.regiojet.cz/Booking/from/{0}/to/{1}/tarif/REGULAR/departure/{2}/retdep/{2}/return/false'.format(source, destination, when))
+        self.g.go('https://jizdenky.regiojet.cz/Booking/from/{0}/to/{1}/tarif/REGULAR/departure/{2}/retdep/{2}/return/false?1-1.IBehaviorListener.0-mainPanel-routesPanel&_=1480766048364'.format(source, destination, when))
 
         connections = []
         for elem in self.g.doc.select('//div[contains(@class, "routeSummary")]'):
@@ -47,3 +47,4 @@ class TicketSearcher:
             exit('City ' + name + ' wasn\'t found in city dictionary')
 
         return city_id.pop(0)
+
