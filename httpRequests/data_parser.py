@@ -1,5 +1,5 @@
 from grab import Grab
-
+from datetime import datetime
 
 class DataParser:
     def __init__(self):
@@ -21,10 +21,10 @@ class DataParser:
         self.g.go('https://jizdenky.regiojet.cz')
         self.g.go(
             'https://jizdenky.regiojet.cz/Booking/from/{0}/to/{1}/tarif/REGULAR/departure/{2}/retdep/{2}/return/false'.format(
-                source, destination, when))
+                source, destination, when.strftime('%Y%m%d')))
         self.g.go(
             'https://jizdenky.regiojet.cz/Booking/from/{0}/to/{1}/tarif/REGULAR/departure/{2}/retdep/{2}/return/false?1-1.IBehaviorListener.0-mainPanel-routesPanel&_=1480766048364'.format(
-                source, destination, when))
+                source, destination, when.strftime('%Y%m%d')))
 
         connections = []
         for elem in self.g.doc.select('//div[contains(@class, "routeSummary")]'):
@@ -36,8 +36,8 @@ class DataParser:
             price = price.text().split()
 
             connections.append({
-                'departure': departure.text(),
-                'arrival': arrival.text(),
+                'departure': when.strftime('%Y-%m-%d') + ' ' + departure.text(),
+                'arrival': when.strftime('%Y-%m-%d') + ' ' + arrival.text(),
                 'transfer': change.text(),
                 'free_spaces': space.text(),
                 'price': price.pop(0),

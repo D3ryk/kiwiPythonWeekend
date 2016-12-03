@@ -30,3 +30,6 @@ class TicketSearcher:
             exit('City ' + name + ' wasn\'t found in city dictionary')
 
         return city_id.pop(0)
+
+    def get_best_connection(self, connections):
+        return {}
