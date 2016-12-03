@@ -1,5 +1,6 @@
 from data_parser import DataParser
 from redis import StrictRedis
+import json
 
 
 class TicketSearcher:
@@ -13,13 +14,16 @@ class TicketSearcher:
         })
 
     def get_connections(self, source, destination, when):
-        key = 'connections_{0}_{1}_{2}'.format(source, destination, when)
+        key = 'connections_{0}_{1}_{2}'.format(source, destination, when.strftime('%Y%m%d'))
 
         connections = self.redis.get(key)
         if not connections:
             connections = self.data_parser.get_connections(source, destination, when)
+        else:
+            connections = json.loads(connections.decode('utf-8'))
 
-        self.redis.set(key, connections)
+        self.redis.set(key, json.dumps(connections))
+        self.redis.expire(key, 60 * 60)
 
         return connections
 
@@ -32,4 +36,5 @@ class TicketSearcher:
         return city_id.pop(0)
 
     def get_best_connection(self, connections):
+        print(connections)
         return {}
