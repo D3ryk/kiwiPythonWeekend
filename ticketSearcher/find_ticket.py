@@ -4,10 +4,15 @@ import argparse
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--from", type=str, help="source station of searched connection")
-parser.add_argument("--to", type=str, help="destination station of searched connection")
+required = parser.add_argument_group('required arguments')
+required.add_argument("-f", "--from", type=str, help="source station of searched connection", required=True)
+required.add_argument("-t", "--to", type=str, help="destination station of searched connection", required=True)
+
 parser.add_argument("--when", type=str, help="date of searched connection")
 args = vars(parser.parse_args())
+
+if not args['when']:
+    args['when'] = datetime.today().strftime('%Y-%m-%d')
 
 ts = TicketSearcher()
 
