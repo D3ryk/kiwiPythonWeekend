@@ -1,29 +1,27 @@
 from data_parser import DataParser
-from redis import StrictRedis
-import json
+from redis_client import RedisClient
 
 
 class TicketSearcher:
+    ALL_CITIES_KEY = "all_czech_rep_cities"
+
     def __init__(self):
         self.data_parser = DataParser()
-        self.all_cities = self.data_parser.get_all_destination()
-        self.redis = StrictRedis(**{
-            'host': '146.185.172.28',
-            'password': 'razdvatrictyripet',
-            'port': '6379'
-        })
+        self.redis_client = RedisClient()
+
+        self.all_cities = self.redis_client.load_data(self.ALL_CITIES_KEY)
+
+        if not self.all_cities:
+            self.all_cities = self.data_parser.get_all_destination()
 
     def get_connections(self, source, destination, when):
         key = 'connections_{0}_{1}_{2}'.format(source, destination, when.strftime('%Y%m%d'))
 
-        connections = self.redis.get(key)
+        connections = self.redis_client.load_data(key)
+
         if not connections:
             connections = self.data_parser.get_connections(source, destination, when)
-        else:
-            connections = json.loads(connections.decode('utf-8'))
-
-        self.redis.set(key, json.dumps(connections))
-        self.redis.expire(key, 60 * 60)
+            self.redis_client.save_data(key, connections)
 
         return connections
 
