@@ -16,8 +16,21 @@ def search():
     source = request.args.get('src')
     destination = request.args.get('dst')
     date = request.args.get('date')
+    error = {}
 
-    ts = TicketSearcher()
-    connections = ts.get_connections(source, destination, datetime.strptime(date, '%Y-%m-%d'))
+    if date:
+        try:
+            date = datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            error = {'error': 'Bad date format for parameter date should be in %Y-%m-%d'}
+    else:
+        date = datetime.today()
 
-    return json.dumps(ts.get_best_connection(connections))
+    if not error:
+        ts = TicketSearcher()
+        connections = ts.get_connections(source, destination, date)
+        response = json.dumps(ts.get_best_connection(connections))
+    else:
+        response = json.dumps(error)
+
+    return response
