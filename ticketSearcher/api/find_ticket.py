@@ -35,7 +35,7 @@ def search():
     if not error:
         ts = TicketSearcher(config_loader.config.get(TicketSearcher.SEARCH_CONFIG_KEY, {}))
         connections = ts.get_connections(source, destination, date)
-        response = json.dumps(ts.get_best_connection(connections))
+        response = json.dumps(connections)
     else:
         response = json.dumps(error)
 
