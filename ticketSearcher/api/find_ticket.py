@@ -1,7 +1,9 @@
 from flask import Flask, request
 
+import sys
+import os
+import json
 #ToDo: Solve importing ticket_searcher module better way and not to add upper dir by this nice hack..
-import sys, os, json
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from ticket_searcher import TicketSearcher
@@ -38,5 +40,3 @@ def search():
         response = json.dumps(error)
 
     return response
-
-app.run()
