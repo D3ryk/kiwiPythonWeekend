@@ -5,10 +5,14 @@ import sys, os, json
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from ticket_searcher import TicketSearcher
+from config_loader import ConfigLoader
 from datetime import datetime
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
+
+config_loader = ConfigLoader('config.json')
+config_loader.start()
 
 
 @app.route('/search', methods=['GET'])
@@ -34,3 +38,5 @@ def search():
         response = json.dumps(error)
 
     return response
+
+app.run()

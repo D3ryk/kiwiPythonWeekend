@@ -1,0 +1,6 @@
+{
+  "searchRestrictions": {
+    "restrictedCities": ["Ostrava"],
+    "restrictedDates": ["2016-12-24"]
+  }
+}
