@@ -4,7 +4,7 @@ from redis_client import RedisClient
 
 class TicketSearcher:
     ALL_CITIES_KEY = 'all_czech_rep_cities'
-    SEARCH_RESTRICTION_CONFIG_KEY = 'searchRestrictions'
+    SEARCH_CONFIG_KEY = 'searchConfig'
 
     def __init__(self, search_restrictions):
         self.data_parser = DataParser()
@@ -24,7 +24,13 @@ class TicketSearcher:
             connections = self.data_parser.get_connections(source, destination, when)
             self.redis_client.save_data(key, connections)
 
+        connections = self.apply_search_config(connections)
+
         return connections
+
+    def apply_search_config(self, search_result):
+        #ToDo: apply all posible search configs
+        return search_result
 
     def get_city_id(self, name):
         city_id = [city['id'] for city in self.all_cities if city['name'] == name]

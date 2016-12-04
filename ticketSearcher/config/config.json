@@ -1,6 +1,7 @@
 {
-  "searchRestrictions": {
+  "searchConfig": {
     "restrictedCities": ["Ostrava"],
-    "restrictedDates": ["2016-12-24"]
+    "restrictedDates": ["2016-12-24"],
+    "ticketMargin": 10
   }
 }
