@@ -13,7 +13,7 @@ from datetime import datetime
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 
-config_loader = ConfigLoader('config.json')
+config_loader = ConfigLoader(ConfigLoader.CONFIG_NAME)
 config_loader.start()
 
 
@@ -33,7 +33,7 @@ def search():
         date = datetime.today()
 
     if not error:
-        ts = TicketSearcher()
+        ts = TicketSearcher(config_loader.config.get(TicketSearcher.SEARCH_RESTRICTION_CONFIG_KEY, {}))
         connections = ts.get_connections(source, destination, date)
         response = json.dumps(ts.get_best_connection(connections))
     else:

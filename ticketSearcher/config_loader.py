@@ -7,6 +7,7 @@ import os
 
 class ConfigLoader(Thread):
     CONFIG_REDIS_KEY = 'honoluluConfigKey'
+    CONFIG_NAME = 'config.json'
     CONFIG_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'config'))
 
     def __init__(self, config_file):
@@ -27,7 +28,13 @@ class ConfigLoader(Thread):
         return config
 
     def load_config(self):
-        return self.redis_client.load_data(self.CONFIG_REDIS_KEY)
+        config = self.redis_client.load_data(self.CONFIG_REDIS_KEY)
+
+        if not config:
+            config = self.load_config_from_file(self.CONFIG_NAME)
+            self.redis_client.save_data(self.CONFIG_REDIS_KEY, config)
+
+        return config
 
     def is_config_file_changed(self):
         new_config = self.load_config()

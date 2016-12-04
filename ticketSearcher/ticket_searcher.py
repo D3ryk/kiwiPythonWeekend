@@ -3,12 +3,13 @@ from redis_client import RedisClient
 
 
 class TicketSearcher:
-    ALL_CITIES_KEY = "all_czech_rep_cities"
+    ALL_CITIES_KEY = 'all_czech_rep_cities'
+    SEARCH_RESTRICTION_CONFIG_KEY = 'searchRestrictions'
 
-    def __init__(self):
+    def __init__(self, search_restrictions):
         self.data_parser = DataParser()
         self.redis_client = RedisClient()
-
+        self.search_restrictions = search_restrictions
         self.all_cities = self.redis_client.load_data(self.ALL_CITIES_KEY)
 
         if not self.all_cities:

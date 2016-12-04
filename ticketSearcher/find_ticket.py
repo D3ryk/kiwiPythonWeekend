@@ -25,7 +25,8 @@ else:
     args['when'] = datetime.today()
 
 # main logic
-ts = TicketSearcher()
+# cmd script don't respect any config search restrictions
+ts = TicketSearcher({})
 
 connections = ts.get_connections(
     ts.get_city_id(args['from']),
