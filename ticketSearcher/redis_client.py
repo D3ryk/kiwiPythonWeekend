@@ -3,11 +3,15 @@ import json
 
 
 class RedisClient:
+    REDIS_HOST = ''
+    REDIS_PASSWD = ''
+    REDIS_PORT = ''
+
     def __init__(self):
         self.redis = StrictRedis(**{
-            'host': '146.185.172.28',
-            'password': 'razdvatrictyripet',
-            'port': '6379'
+            'host': self.REDIS_HOST,
+            'password': self.REDIS_PASSWD,
+            'port': self.REDIS_PORT
         })
 
     def load_data(self, key):
