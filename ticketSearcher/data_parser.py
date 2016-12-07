@@ -1,4 +1,5 @@
 from grab import Grab
+from weblib.error import DataNotFound
 
 
 class DataParser:
@@ -28,12 +29,16 @@ class DataParser:
 
         connections = []
         for elem in self.g.doc.select('//div[contains(@class, "routeSummary")]'):
-            departure = elem.select('//div[contains(@class, "col_depart")]')
-            arrival = elem.select('//div[contains(@class, "col_arival")]')
-            change = elem.select('//div[contains(@class, "col_change")]')
-            space = elem.select('//div[contains(@class, "col_space")]')
-            price = elem.select('//div[contains(@class, "col_price")]')
-            price = price.text().split()
+
+            try:
+                departure = elem.select('.//div[contains(@class, "col_depart")]')
+                arrival = elem.select('.//div[contains(@class, "col_arival")]')
+                change = elem.select('.//div[contains(@class, "col_change")]')
+                space = elem.select('.//div[contains(@class, "col_space")]')
+                price = elem.select('.//div[contains(@class, "col_price")]')
+                price = price.text().split()
+            except DataNotFound:
+                continue
 
             connections.append({
                 'departure': when.strftime('%Y-%m-%d') + ' ' + departure.text(),
