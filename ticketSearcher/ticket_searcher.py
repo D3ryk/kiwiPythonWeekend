@@ -29,16 +29,26 @@ class TicketSearcher:
         return connections
 
     def apply_search_config(self, search_result):
-        #ToDo: apply all posible search configs
+        if self.search_restrictions[self.SEARCH_CONFIG_KEY]:
+            print(self.search_restrictions[self.SEARCH_CONFIG_KEY])
+
         return search_result
 
-    def get_city_id(self, name):
-        city_id = [city['id'] for city in self.all_cities if city['name'] == name]
+    def get_city_id(self, city_name):
+        city_id = [city['id'] for city in self.all_cities if city['name'] == city_name]
 
         if not city_id:
-            exit('City ' + name + ' wasn\'t found in city dictionary')
+            Exception('City ' + city_name + ' wasn\'t found in city dictionary')
 
         return city_id.pop(0)
+
+    def get_city_name(self, city_id):
+        city_name = [city['name'] for city in self.all_cities if city['id'] == city_id]
+
+        if not city_name:
+            raise Exception('City with ' + city_id + ' wasn\'t found in city dictionary')
+
+        return city_name.pop(0)
 
     def get_best_connection(self, connections):
         result = {}
