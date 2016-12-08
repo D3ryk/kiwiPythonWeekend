@@ -38,7 +38,7 @@ class TicketSearcher:
         city_id = [city['id'] for city in self.all_cities if city['name'] == city_name]
 
         if not city_id:
-            Exception('City ' + city_name + ' wasn\'t found in city dictionary')
+            raise Exception('City ' + city_name + ' wasn\'t found in city dictionary')
 
         return city_id.pop(0)
 
