@@ -30,6 +30,7 @@ class TicketSearcher:
 
     def apply_search_config(self, search_result):
         if self.search_restrictions[self.SEARCH_CONFIG_KEY]:
+            # ToDo: apply all posible search configs
             print(self.search_restrictions[self.SEARCH_CONFIG_KEY])
 
         return search_result
