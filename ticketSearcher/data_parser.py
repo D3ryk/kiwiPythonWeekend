@@ -18,14 +18,14 @@ class DataParser:
 
         return all_cities
 
-    def get_connections(self, source, destination, when):
+    def get_connections(self, source_id, destination_id, when):
         self.g.go('https://jizdenky.regiojet.cz')
         self.g.go(
             'https://jizdenky.regiojet.cz/Booking/from/{0}/to/{1}/tarif/REGULAR/departure/{2}/retdep/{2}/return/false'.format(
-                source, destination, when.strftime('%Y%m%d')))
+                source_id, destination_id, when.strftime('%Y%m%d')))
         self.g.go(
             'https://jizdenky.regiojet.cz/Booking/from/{0}/to/{1}/tarif/REGULAR/departure/{2}/retdep/{2}/return/false?1-1.IBehaviorListener.0-mainPanel-routesPanel&_=1480766048364'.format(
-                source, destination, when.strftime('%Y%m%d')))
+                source_id, destination_id, when.strftime('%Y%m%d')))
 
         connections = []
         for elem in self.g.doc.select('//div[contains(@class, "routeSummary")]'):
@@ -41,6 +41,8 @@ class DataParser:
                 continue
 
             connections.append({
+                'departure_station_id': source_id,
+                'arrival_station_id': destination_id,
                 'departure': when.strftime('%Y-%m-%d') + ' ' + departure.text(),
                 'arrival': when.strftime('%Y-%m-%d') + ' ' + arrival.text(),
                 'transfer': change.text(),
